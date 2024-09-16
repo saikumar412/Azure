@@ -90,3 +90,7 @@ foreach ($repository in $repositories.Keys) {
         az acr repository delete --name $registryName --image $imageToDelete --yes 
     }
 }
+
+# Deleting manifests for images withtout images 
+Foreach($x in (az acr repository show-manifests -n testimggw --repository org/cloud-s3 | ConvertFrom-Json)) { if (!$x.tags) { az acr repository delete -n testimggw --image "org/cloud-s3@$($x.digest)" -y }}
+
